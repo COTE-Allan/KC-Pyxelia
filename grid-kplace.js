@@ -42,6 +42,7 @@ container.appendChild(grid(10, 30, 1000));
 var svgElement = document.querySelector("svg");
 var panZoomTiger = svgPanZoom(svgElement, {
   dblClickZoomEnabled: false,
+  // Le customEventsHandler ici présent ajoute des fonctionnalités de Hammer.js pour permettre les contrôles mobile, avec le pinch en autre.
   customEventsHandler: {
     haltEventListeners: [
       "touchstart",
@@ -67,25 +68,12 @@ var panZoomTiger = svgPanZoom(svgElement, {
       // Enable pinch
       this.hammer.get("pinch").set({ enable: true });
 
-      // Handle pan
-      this.hammer.on("panstart panmove", function (ev) {
-        // On pan start reset panned variables
-        if (ev.type === "panstart") {
-          pannedX = 0;
-          pannedY = 0;
-        }
-
-        // Pan only the difference
-        instance.panBy({ x: ev.deltaX - pannedX, y: ev.deltaY - pannedY });
-        pannedX = ev.deltaX;
-        pannedY = ev.deltaY;
-      });
-
       // Handle pinch
       this.hammer.on("pinchstart pinchmove", function (ev) {
         // On pinch start remember initial zoom
         if (ev.type === "pinchstart") {
           initialScale = instance.getZoom();
+          alert("tets");
           instance.zoomAtPoint(initialScale * ev.scale, {
             x: ev.center.x,
             y: ev.center.y,
@@ -97,13 +85,11 @@ var panZoomTiger = svgPanZoom(svgElement, {
           y: ev.center.y,
         });
       });
-
       // Prevent moving the page on some devices when panning over SVG
       options.svgElement.addEventListener("touchmove", function (e) {
         e.preventDefault();
       });
     },
-
     destroy: function () {
       this.hammer.destroy();
     },

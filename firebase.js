@@ -57,7 +57,7 @@ getGrid();
 onValue(child(dbRef, `2/data`), (snapshot) => {
   if (snapshot.exists() && colors != undefined) {
     getGrid();
-    console.log("edit !");
+    // console.log("edit !");
   } else {
     console.log("No data available");
   }
@@ -67,7 +67,7 @@ onValue(child(dbRef, `2/data`), (snapshot) => {
 // Obtenir la grid
 function getGrid() {
   let grid = "blank grid";
-  console.log(grid);
+  // console.log(grid);
   get(child(dbRef, `2/data`))
     .then((snapshot) => {
       if (snapshot.exists()) {
@@ -85,7 +85,7 @@ function getGrid() {
 
 // Mettre a jour la grid
 function updateGrid(grid) {
-  console.log(grid);
+  // console.log(grid);
   grid.forEach((pixel) => {
     let pixel_id = pixel.pixel_id;
     let color_id = pixel.color_id;
