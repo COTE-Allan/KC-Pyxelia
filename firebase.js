@@ -5,6 +5,7 @@ import {
   getDatabase,
   get,
   ref,
+  update,
   child,
   onValue,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
@@ -25,7 +26,6 @@ const firebaseConfig = {
   databaseURL:
     "https://koffi-place-default-rtdb.europe-west1.firebasedatabase.app",
 };
-
 // ===========================================================
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -33,28 +33,102 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const dbRef = ref(getDatabase());
 // ===========================================================
-// Premier test, lecture en une fois d'une valeur de la DB
+// Obtenir les couleurs
+let colors;
+get(child(dbRef, `1/data`))
+  .then((snapshot) => {
+    if (snapshot.exists()) {
+      // console.log(snapshot.val());
+      colors = snapshot.val();
+    } else {
+      console.log("No data available");
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
-// get(child(dbRef, `1/name`))
-//   .then((snapshot) => {
-//     if (snapshot.exists()) {
-//       console.log(snapshot.val());
-//     } else {
-//       console.log("No data available");
-//     }
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//   });
+// Obtenir la grid
+getGrid();
 
 // ===========================================================
-// Deuxième étape : Console log a chaque edit DANS la db [Temps réel]
-
-// S'active sur 1/name et tout ses enfants.
-onValue(child(dbRef, `1/name`), (snapshot) => {
-  if (snapshot.exists()) {
-    console.log(snapshot.val());
+// Mettre a jour la grid en temps réel
+// S'active sur 2/data et tout ses enfants.
+onValue(child(dbRef, `2/data`), (snapshot) => {
+  if (snapshot.exists() && colors != undefined) {
+    getGrid();
+    console.log("edit !");
   } else {
     console.log("No data available");
   }
+});
+
+// ===========================================================
+// Obtenir la grid
+function getGrid() {
+  let grid = "blank grid";
+  console.log(grid);
+  get(child(dbRef, `2/data`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        // console.log(snapshot.val());
+        grid = snapshot.val();
+        updateGrid(grid);
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+// Mettre a jour la grid
+function updateGrid(grid) {
+  // console.log(grid);
+  grid.forEach((pixel) => {
+    let pixel_id = pixel.pixel_id;
+    let color_id = pixel.color_id;
+    let target = document.getElementById(pixel_id);
+    // console.log(target);
+    // console.log(pixel_id);
+    // console.log(color_id);
+    // target.classList.add("red");
+    colors.every((color) => {
+      if (color.color_id == color_id) {
+        target.removeAttribute("class");
+        target.classList.add("pixel", color.color_name);
+        return false;
+      }
+      return true;
+    });
+  });
+}
+
+// Changer un pixel après un click
+function updatePixel(pixel_id, color_id) {
+  const db = getDatabase();
+  const updates = {};
+  updates["/2/data/" + pixel_id + "/color_id"] = color_id;
+  update(ref(db), updates).then(() => {
+    console.log("success");
+  });
+}
+
+// Click sur un pixel
+let pixels = document.querySelectorAll("rect");
+// console.log(svg);
+pixels.forEach((pixel) => {
+  pixel.addEventListener(
+    "click",
+    function (e) {
+      var id = e.target.id - 1;
+      console.log(id);
+      updatePixel(id, 1);
+      // if (id) alert(id.substring(1));
+      var color = document.querySelector(".active");
+      // e.target.classList.add(color.className.split(" ")[1]);
+    },
+    false
+  );
 });

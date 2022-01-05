@@ -126,4 +126,17 @@
     "database": "koffi_place",
     "data": []
   }
+  //   {
+  //     "type": "table",
+  //     "name": "users",
+  //     "database": "koffi_place",
+  //     "data": [
+  //       {
+  //         "user_id": "1",
+  //         "user_name": "root",
+  //         "user_password": "root",
+  //         "user_last_pixel_timestamp": "0"
+  //       }
+  //     ]
+  //   }
 ]

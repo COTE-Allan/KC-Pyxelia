@@ -22,27 +22,17 @@ var grid = function (numberPerSide, size, pixelsPerSide) {
         ["translate(", i * size, ",", j * size, ")"].join("")
       );
 
-      var number = numberPerSide * i + j;
+      var number = numberPerSide * i + j + 1;
       var box = document.createSvg("rect");
       box.setAttribute("width", size);
       box.setAttribute("height", size);
-      box.setAttribute("id", "pixel number-" + number);
+      box.setAttribute("id", number);
+      box.setAttribute("class", "pixel");
       g.appendChild(box);
       svg.appendChild(g);
     }
   }
 
-  // Click sur une case
-  svg.addEventListener(
-    "click",
-    function (e) {
-      var id = e.target.id;
-      // if (id) alert(id.substring(1));
-      var color = document.querySelector(".active");
-      e.target.classList.add(color.className.split(" ")[1]);
-    },
-    false
-  );
   return svg;
 };
 
