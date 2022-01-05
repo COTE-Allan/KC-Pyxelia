@@ -29,12 +29,12 @@ const firebaseConfig = {
 // ===========================================================
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-const database = getDatabase(app);
 const dbRef = ref(getDatabase());
+// const analytics = getAnalytics(app);
+// const database = getDatabase(app);
 // ===========================================================
 // Obtenir les couleurs
-let colors;
+let colors = [];
 get(child(dbRef, `1/data`))
   .then((snapshot) => {
     if (snapshot.exists()) {
@@ -85,7 +85,7 @@ function getGrid() {
 
 // Mettre a jour la grid
 function updateGrid(grid) {
-  // console.log(grid);
+  console.log(grid);
   grid.forEach((pixel) => {
     let pixel_id = pixel.pixel_id;
     let color_id = pixel.color_id;
@@ -120,14 +120,12 @@ let pixels = document.querySelectorAll("rect");
 // console.log(svg);
 pixels.forEach((pixel) => {
   pixel.addEventListener(
-    "click",
+    "dblclick",
     function (e) {
       var id = e.target.id - 1;
       console.log(id);
-      updatePixel(id, 1);
-      // if (id) alert(id.substring(1));
       var color = document.querySelector(".active");
-      // e.target.classList.add(color.className.split(" ")[1]);
+      updatePixel(id, 1);
     },
     false
   );

@@ -40,4 +40,6 @@ var grid = function (numberPerSide, size, pixelsPerSide) {
 var container = document.getElementById("container");
 container.appendChild(grid(10, 30, 1000));
 var svgElement = document.querySelector("svg");
-var panZoomTiger = svgPanZoom(svgElement);
+var panZoomTiger = svgPanZoom(svgElement, {
+  dblClickZoomEnabled: false,
+});
