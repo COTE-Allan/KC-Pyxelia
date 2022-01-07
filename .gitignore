@@ -1,0 +1,10 @@
+
+vendor/
+
+adminsdkFirebase.json
+
+vendor/lcobucci/jwt/src/Signer/Ecdsa/Sha512.php
+
+composer.json
+
+composer.lock

@@ -123,9 +123,12 @@ pixels.forEach((pixel) => {
     "dblclick",
     function (e) {
       var id = e.target.id - 1;
-      console.log(id);
-      var color = document.querySelector(".active");
-      updatePixel(id, 1);
+      var colorActive = document.querySelector(".colorActive");
+      if (colorActive != null) {
+        // console.log(id);
+        console.log(colorActive);
+        updatePixel(id, colorActive.id);
+      }
     },
     false
   );

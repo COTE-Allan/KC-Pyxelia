@@ -1,0 +1,342 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body {
+  margin: 0;
+  background-color: black;
+  color: white;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+rect {
+  -webkit-transition: fill 100ms ease-in-out;
+  transition: fill 100ms ease-in-out;
+}
+
+rect:hover {
+  fill: #bebebe;
+}
+
+g {
+  fill: white;
+}
+
+g:hover {
+  cursor: crosshair;
+}
+
+g:active:hover {
+  cursor: all-scroll;
+}
+
+#container svg {
+  width: 80vw;
+  background-color: #cccccc;
+}
+
+.menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+@media (max-width: 599px) {
+  .menu {
+    display: none;
+  }
+}
+
+.menu svg {
+  width: 90%;
+}
+
+.menu-colorsList {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.menu-colorsList-button {
+  margin: 10px;
+  -ms-flex-preferred-size: 20%;
+      flex-basis: 20%;
+  width: 50px;
+  height: 50px;
+  border: white 3px solid;
+  -webkit-transition: -webkit-transform 200ms ease-in-out;
+  transition: -webkit-transform 200ms ease-in-out;
+  transition: transform 200ms ease-in-out;
+  transition: transform 200ms ease-in-out, -webkit-transform 200ms ease-in-out;
+}
+
+.menu-colorsList-button:hover {
+  cursor: pointer;
+  -webkit-transform: scale(120%);
+          transform: scale(120%);
+}
+
+.menu-colorsList-button.colorActive {
+  -webkit-transform: scale(120%);
+          transform: scale(120%);
+}
+
+.RaCModal {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 80vw;
+  height: 80vh;
+  background-color: black;
+  color: white;
+  font-family: "VT323", monospace;
+  z-index: 1000;
+  border: 10px white solid;
+  font-size: 20px;
+}
+
+.RaCModal.IsRemoved {
+  -webkit-animation: scale-out-center 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+          animation: scale-out-center 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+}
+
+.RaCModal button {
+  padding: 10px;
+  font-family: "VT323", monospace;
+  color: white;
+  font-size: 25px;
+  border: white 3px solid;
+  background-color: black;
+  text-align: center;
+  -webkit-transition: background-color 200ms ease-in, color 200ms ease-in;
+  transition: background-color 200ms ease-in, color 200ms ease-in;
+}
+
+@media (min-width: 900px) {
+  .RaCModal button {
+    font-size: 35px;
+    width: 30vw;
+  }
+  .RaCModal button:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+  }
+}
+
+.RaCModal ul {
+  width: 90%;
+  height: 30%;
+}
+
+.RaCModal h1,
+.RaCModal h2 {
+  text-decoration: underline;
+}
+
+.RaCModal h1 {
+  font-size: 35px;
+}
+
+.RaCModal h2 {
+  font-size: 25px;
+}
+
+@media (min-width: 900px) {
+  .RaCModal {
+    width: 50vw;
+    height: 60vh;
+  }
+}
+
+@-webkit-keyframes scale-out-center {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-out-center {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 1;
+  }
+}
+/*# sourceMappingURL=game.css.map */

@@ -42,6 +42,7 @@ container.appendChild(grid(10, 30, 1000));
 var svgElement = document.querySelector("svg");
 var panZoomTiger = svgPanZoom(svgElement, {
   dblClickZoomEnabled: false,
+  fit: false,
   // Le customEventsHandler ici présent ajoute des fonctionnalités de Hammer.js pour permettre les contrôles mobile, avec le pinch en autre.
   customEventsHandler: {
     haltEventListeners: [
