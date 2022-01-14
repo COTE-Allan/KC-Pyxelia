@@ -23,4 +23,17 @@ switch ($route) {
         $colors = $db->getData("1/name");
         render($route, compact('title', 'colors', 'metaDesc'));
         break;
+    case "403":
+        $title = "Pyxelia - 403";
+        $metaDesc = "Mince, il y a un problème, tu ne devrait pas être ici !";
+        $error_number = "403";
+        $error_message = "Eh oh ! T'essaie d'accéder à des trucs interdits là !";
+        render("error", compact('title', 'metaDesc', 'error_message', 'error_number'));
+    default:
+        $title = "Pyxelia - 404";
+        $metaDesc = "Mince, il y a un problème, tu ne devrait pas être ici !";
+        $error_number = "404";
+        $error_message = "La page n'a pas été trouvé...";
+        render("error", compact('title', 'metaDesc', 'error_message', 'error_number'));
+        break;
 }

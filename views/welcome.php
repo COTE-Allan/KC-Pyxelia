@@ -95,7 +95,7 @@
             y_axis: "distance",
             x_axis: "always",
           },
-          <?='color_pallete: ["#DC1818", "#FDD50F", "#0FB7FD", "#57C32D", "#E95420", "#C71585", "#FFC0CB", "#FFF"],'?>
+          <?='color_pallete: ["#DC1818", "#FDD50F", "#0FB7FD", "#57C32D", "#E95420", "#C71585", "#FFC0CB", "#FFF", "#FFF", "#FFF", "#FFF", "#FFF", "#FFF","#FFF"],'?>
         },
         dynamic_options: {
           dynamic: true,

@@ -37,6 +37,9 @@
         <span class="menu-userName">****</span>
         <span class="menu-disconnect">(Déconnection)</span>
       </p>
+      <p class="menu-version">
+        Pyxelia by Koffi Cup - 1.0-alpha
+      </p>
       <div id="firebaseui-auth-container">
         Vous devez être connecté pour dessiner !
       </div>

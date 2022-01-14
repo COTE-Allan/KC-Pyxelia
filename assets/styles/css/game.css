@@ -1114,8 +1114,9 @@ table {
   text-decoration: none;
 }
 
-.navbar .buttonNav.buttonDisplayCommands {
-  display: none;
+.navbar .buttonNav.shareButtonActive {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 @media (min-width: 900px) {
@@ -1125,6 +1126,10 @@ table {
     cursor: pointer;
     z-index: 5;
   }
+}
+
+.buttonDisplayCommands {
+  display: none;
 }
 
 @-webkit-keyframes scale-out-center {

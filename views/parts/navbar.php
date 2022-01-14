@@ -43,5 +43,6 @@
   let buttonDisplayShare = document.querySelector(".buttonDisplayShare");
   buttonDisplayShare.addEventListener("click", function () {
     shareList.classList.toggle("shareActive");
+    buttonDisplayShare.classList.toggle("shareButtonActive")
   });
 </script>

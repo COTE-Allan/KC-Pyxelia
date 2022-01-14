@@ -144,7 +144,7 @@ function updateGrid(grid) {
 function updateDB(pixel_id, color_id) {
   let updates = {};
   let pixel_amount = 0;
-  let timeBeforeNext = 0;
+  let timeBeforeNext = 60;
   let actualDate = Math.floor(Date.now() / 1000);
   get(child(dbRef, "users/" + userUID + "/")).then((snapshot) => {
     let result = snapshot.val();

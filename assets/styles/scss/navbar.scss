@@ -20,8 +20,8 @@
     }
   }
   & .buttonNav {
-    &.buttonDisplayCommands {
-      display: none;
+    &.shareButtonActive {
+      transform: scale(1.2);
     }
     margin: 0 5px;
     display: flex;
@@ -48,4 +48,8 @@
       }
     }
   }
+}
+
+.buttonDisplayCommands {
+  display: none;
 }

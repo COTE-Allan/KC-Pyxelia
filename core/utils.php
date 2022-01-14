@@ -30,15 +30,13 @@ function frontController()
 {
     // Si le paramètre est trouvé, on va se connecter à la base de données et chercher le livre enregistrer avec cet id.
     // Si aucun elements n'est trouvé, on affiche une erreur 404
-    // Sinon, on affiche le livre.
-    //
 
     /**
      * 1. On récupère le paramètre d'url id
      */
     // on déclare la variable qui va récevoir l'id et on l'initialise avec rien.
     $page = null;
-    $pageList = ["game", "welcome"];
+    $pageList = ["game", "welcome", "403"];
 
     // on vérifie l'existance d'un paramètre id, non null, de type numérique
     if (!empty($_GET['pageIs']) && ctype_print($_GET['pageIs'])) {
@@ -52,9 +50,5 @@ function frontController()
     } else if (empty($_GET['pageIs'])) {
         $page = "welcome";
         return $page;
-    }
-    // s'il n'existe pas de paramètre, on affiche le message d'erreur
-    if (!$page) {
-        die("Vous devez définir un paramètre page valide dans l'url");
     }
 }

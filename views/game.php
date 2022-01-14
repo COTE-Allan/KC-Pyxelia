@@ -1,4 +1,4 @@
-    <link rel="stylesheet" href="assets/styles/scss/game.css" />
+    <link rel="stylesheet" href="assets/styles/css/game.css" />
     <!-- En utilisant l'objet Database fabriqué en PHP, je fabrique une feuille de style des couleurs -->
     <style>
     <?php foreach ($colors as $color) {echo "." . $color["color_name"] . "{ fill: " . $color["color_hexa"] . "} ";}?>
@@ -9,16 +9,16 @@
     <body>
     <!-- ======================= -->
     <!-- Ecran de chargement -->
-    <?php require_once "loading.php"?>
+    <?php require_once "parts/loading.php"?>
     <!-- Boutons latéraux -->
-    <?php require_once "navbar.php"?>
+    <?php require_once "parts/navbar.php"?>
     <!-- Modale commandes -->
-    <?php require_once "controls.php"?>
+    <?php require_once "parts/controls.php"?>
     <!-- ======================= -->
     <!-- Emplacement du tableau ici -->
     <div id="container"></div>
     <!-- ======================= -->
-    <?php require_once "menu.php"?>
+    <?php require_once "parts/menu.php"?>
     <!-- ======================= -->
     <!-- Scripts internes -->
     <script src="assets/js/hammer.min.js"></script>
