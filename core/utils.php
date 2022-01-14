@@ -38,7 +38,7 @@ function frontController()
      */
     // on déclare la variable qui va récevoir l'id et on l'initialise avec rien.
     $page = null;
-    $pageList = ["pyxeliaGame", "pyxeliaWelcome"];
+    $pageList = ["game", "welcome"];
 
     // on vérifie l'existance d'un paramètre id, non null, de type numérique
     if (!empty($_GET['pageIs']) && ctype_print($_GET['pageIs'])) {
@@ -50,7 +50,7 @@ function frontController()
             $page = null;
         }
     } else if (empty($_GET['pageIs'])) {
-        $page = "pyxeliaWelcome";
+        $page = "welcome";
         return $page;
     }
     // s'il n'existe pas de paramètre, on affiche le message d'erreur

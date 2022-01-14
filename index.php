@@ -1,9 +1,9 @@
 <?php
 
 /**
- * CE FICHIER EST LA PAGE D'ACCUEIL DU SITE. ELLE DOIT AFFICHER LA LISTE DES LIVRES DISPONIBLES DANS NOTRE BIBLIOTHEQUE.
+ * CE FICHIER EST LA PAGE D'ACCUEIL DU SITE.
  *
- * On devra se connecter à la base de données et récupérer une liste de livres triés par ordre alphabétique de titre. On va boucler sur la liste pour afficher chaque item de la liste.
+ * Le controller décidera de la page à afficher en fonction du paramètre dans le lien.
  */
 
 require_once "core.php";
@@ -12,13 +12,15 @@ require_once "core.php";
 $route = frontController();
 
 switch ($route) {
-    case "pyxeliaWelcome":
+    case "welcome":
         $title = "Pyxelia - Bienvenue !";
-        render($route, compact('title'));
+        $metaDesc = "Pyxelia est une plateforme de pixel-art en multijoueur inspiré par r/Place.";
+        render($route, compact('title', 'metaDesc'));
         break;
-    case "pyxeliaGame":
+    case "game":
         $title = "Pyxelia - Dessinez !";
+        $metaDesc = "Connectez-vous et créez une oeuvre d'art avec vos amis sur Pyxelia !";
         $colors = $db->getData("1/name");
-        render($route, compact('title', 'colors'));
+        render($route, compact('title', 'colors', 'metaDesc'));
         break;
 }

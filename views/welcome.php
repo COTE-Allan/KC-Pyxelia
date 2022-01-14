@@ -77,7 +77,7 @@
           créez à plusieurs !
         </p>
         <a
-          href="index.php?pageIs=pyxeliaGame"
+          href="index.php?pageIs=game"
           class="welcome-mainContent-enterGame"
           >Entrer en Pyxelia</a
         >
@@ -95,6 +95,7 @@
             y_axis: "distance",
             x_axis: "always",
           },
+          <?='color_pallete: ["#DC1818", "#FDD50F", "#0FB7FD", "#57C32D", "#E95420", "#C71585", "#FFC0CB", "#FFF"],'?>
         },
         dynamic_options: {
           dynamic: true,

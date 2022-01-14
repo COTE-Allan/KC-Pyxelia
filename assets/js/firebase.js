@@ -1,20 +1,25 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-// import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+// _____________________________________________
+// Importation des fonctions Firebase requises.
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
 import {
   getDatabase,
   get,
   ref,
+  set,
   update,
   child,
   onValue,
-} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  getAuth,
+  signOut,
+  setPersistence,
+  browserSessionPersistence,
+} from "https://www.gstatic.com/firebasejs/9.6.2/firebase-auth.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// _____________________________________________
+// Configuration de la DB
 const firebaseConfig = {
   apiKey: "AIzaSyDd3yvb7hR4CV2UITisNBRXDwFRIoKyK2E",
   authDomain: "koffi-place.firebaseapp.com",
@@ -26,16 +31,31 @@ const firebaseConfig = {
   databaseURL:
     "https://koffi-place-default-rtdb.europe-west1.firebasedatabase.app",
 };
-// ===========================================================
-// Initialize Firebase
+// _____________________________________________
+// Initilisation de la DB Pyxelia.
+let userUID,
+  ui = null;
+let flagLogged,
+  flagError = false;
+let loadingText;
 const app = initializeApp(firebaseConfig);
-const dbRef = ref(getDatabase());
-// const analytics = getAnalytics(app);
-// const database = getDatabase(app);
+const db = getDatabase();
+const dbRef = ref(db);
+const auth = getAuth(app);
+
+// ██████ ██████  ██    ██ ██████
+// ██      ██   ██ ██    ██ ██   ██
+// ██      ██████  ██    ██ ██   ██
+// ██      ██   ██ ██    ██ ██   ██
+//  ██████ ██   ██  ██████  ██████
+
 // ===========================================================
-// Obtenir les couleurs
+// ===========================================================
+// ===========================================================
+// _____________________________________________
+// Obtenir les couleurs (pour les appliquer dans le pixel choisi)
 let colors = [];
-get(child(dbRef, `1/data`))
+get(child(dbRef, `colors`))
   .then((snapshot) => {
     if (snapshot.exists()) {
       // console.log(snapshot.val());
@@ -45,30 +65,34 @@ get(child(dbRef, `1/data`))
     }
   })
   .catch((error) => {
-    console.error(error);
+    // console.error(error);
+    loadingText =
+      "Mince ! Il y a un problème ! Essaie d'actualiser la page et si le problème persiste, contacte-moi ! ";
+    document.querySelector(".loading-screen-message").innerHTML = loadingText;
+    flagError = true;
   });
 
-// Obtenir la grid
+// _____________________________________________
+
+// Obtenir la grid une première fois.
 getGrid();
 
-// ===========================================================
+// _____________________________________________
 // Mettre a jour la grid en temps réel
-// S'active sur 2/data et tout ses enfants.
-onValue(child(dbRef, `2/data`), (snapshot) => {
+// S'active sur grid et tout ses enfants dès qu'un changement dans la section grid est détecté.
+onValue(child(dbRef, `grid`), (snapshot) => {
   if (snapshot.exists() && colors != undefined) {
     getGrid();
     // console.log("edit !");
-  } else {
-    console.log("No data available");
   }
 });
 
-// ===========================================================
-// Obtenir la grid
+// _____________________________________________
+// Obtenir la grid DB (un array représantant la grid)
 function getGrid() {
-  let grid = "blank grid";
+  let grid = "blankgrid";
   // console.log(grid);
-  get(child(dbRef, `2/data`))
+  get(child(dbRef, `grid`))
     .then((snapshot) => {
       if (snapshot.exists()) {
         // console.log(snapshot.val());
@@ -80,20 +104,21 @@ function getGrid() {
     })
     .catch((error) => {
       console.error(error);
+      loadingText =
+        "Mince ! Il y a un problème ! Essaie d'actualiser la page et si le problème persiste, contacte-moi ! ";
+      document.querySelector(".loading-screen-message").innerHTML = loadingText;
+      flagError = true;
     });
 }
-
-// Mettre a jour la grid
+// _____________________________________________
+// Mettre a jour la grid physique (dans le site) en utilisant la grid DB
 function updateGrid(grid) {
-  // console.log(grid);
+  loadingText = "Création du tableau...";
+  document.querySelector(".loading-screen-message").innerHTML = loadingText;
   grid.forEach((pixel) => {
     let pixel_id = pixel.pixel_id;
     let color_id = pixel.color_id;
     let target = document.getElementById(pixel_id);
-    // console.log(target);
-    // console.log(pixel_id);
-    // console.log(color_id);
-    // target.classList.add("red");
     colors.every((color) => {
       if (color.color_id == color_id) {
         target.removeAttribute("class");
@@ -103,33 +128,196 @@ function updateGrid(grid) {
       return true;
     });
   });
+  // Si la page vient juste de charger, je démarre l'ui après avoir terminé le tableau.
+  if (ui == null && flagError == false) {
+    ui = new firebaseui.auth.AuthUI(auth);
+    googleButtonCreate();
+    document.querySelector(".loading-screen").classList.add("loading-complete");
+    setTimeout(() => {
+      document.querySelector(".loading-screen").classList.add("loading-gone");
+    }, 700);
+  }
 }
 
-// Changer un pixel après un click
-function updatePixel(pixel_id, color_id) {
-  const db = getDatabase();
-  const updates = {};
-  updates["/2/data/" + pixel_id + "/color_id"] = color_id;
-  update(ref(db), updates).then(() => {
-    console.log("success");
+// _____________________________________________
+// Changer un pixel et les stats du user après un click
+function updateDB(pixel_id, color_id) {
+  let updates = {};
+  let pixel_amount = 0;
+  let timeBeforeNext = 0;
+  let actualDate = Math.floor(Date.now() / 1000);
+  get(child(dbRef, "users/" + userUID + "/")).then((snapshot) => {
+    let result = snapshot.val();
+    // Je vérifie si le dernier pixel du joueur à 2 minutes d'ancienneté ou plus.
+    if (actualDate - result["timestamp"] >= timeBeforeNext) {
+      pixel_amount = result["pixels_placed"] + 1;
+      // Incrémente le nombre de pixel placés par l'utilisateur.
+      updates["/users/" + userUID + "/pixels_placed"] = pixel_amount;
+      update(ref(db), updates);
+      // Actualise le timestamp dans le compte de l'utilisateur.
+      updates["/users/" + userUID + "/timestamp"] = actualDate;
+      update(ref(db), updates);
+      // Met a jour la grille.
+      updates["/grid/" + pixel_id + "/color_id"] = color_id;
+      update(ref(db), updates);
+      // J'ai placé mon pixel, je suis alerté.
+      alertify.notify("Votre pixel a correctement été placé.", "success", 5);
+    } else {
+      let timeLeft = timeBeforeNext - (actualDate - result["timestamp"]);
+      // Notification si je ne peut placer
+      alertify.notify(
+        "Prochain pixel dans " + timeLeft + " secondes !",
+        "warning",
+        5
+      );
+    }
   });
 }
 
-// Click sur un pixel
+// ██████  ██████  ███    ██ ████████ ██████   ██████  ██      ███████ ███████
+// ██      ██    ██ ████   ██    ██    ██   ██ ██    ██ ██      ██      ██
+// ██      ██    ██ ██ ██  ██    ██    ██████  ██    ██ ██      █████   ███████
+// ██      ██    ██ ██  ██ ██    ██    ██   ██ ██    ██ ██      ██           ██
+//  ██████  ██████  ██   ████    ██    ██   ██  ██████  ███████ ███████ ███████
+
+// ==========================================
+// ==========================================
+// ==========================================
+// _____________________________________________
+// controles du pixel
 let pixels = document.querySelectorAll("rect");
+let pixelDefaultRGB = null;
 // console.log(svg);
 pixels.forEach((pixel) => {
+  if (window.screen.width > 900) {
+    // Hover le pixel, j'indique quel couleur sera placé
+    pixel.addEventListener("mouseenter", function (e) {
+      pixelDefaultRGB = window.getComputedStyle(e.target).backgroundColor;
+      if (colorRGB != null) {
+        e.target.style.fill = colorRGB;
+        e.target.style.opacity = 0.7;
+      } else {
+        e.target.style.fill = "#000";
+        e.target.style.opacity = 0.1;
+      }
+    });
+    // Je quitte le pixel, je repasse sur la couleur de base.
+    pixel.addEventListener("mouseleave", function (e) {
+      e.target.style.fill = pixelDefaultRGB;
+      e.target.style.opacity = 1;
+    });
+  }
+  // Je double clique, je place un pixel si je suis connecté et que le timestamp me l'autorise (120 seconde entre chaque pixel.)
   pixel.addEventListener(
     "dblclick",
     function (e) {
       var id = e.target.id - 1;
       var colorActive = document.querySelector(".colorActive");
-      if (colorActive != null) {
-        // console.log(id);
-        console.log(colorActive);
-        updatePixel(id, colorActive.id);
+      if (flagLogged == true) {
+        if (colorActive != null) {
+          // console.log(id);
+          // console.log(colorActive);
+          updateDB(id, colorActive.id);
+          pixelDefaultRGB = null;
+        } else {
+          alertify.notify(
+            "Vous n'avez selectionné aucune couleur !",
+            "error",
+            5
+          );
+        }
+      } else {
+        alertify.notify(
+          "Vous devez être connecté pour utiliser Pyxelia !",
+          "error",
+          5
+        );
       }
     },
     false
   );
+});
+
+// ██████  ██████  ███    ██ ███    ██ ███████ ██   ██ ██  ██████  ███    ██
+// ██      ██    ██ ████   ██ ████   ██ ██       ██ ██  ██ ██    ██ ████   ██
+// ██      ██    ██ ██ ██  ██ ██ ██  ██ █████     ███   ██ ██    ██ ██ ██  ██
+// ██      ██    ██ ██  ██ ██ ██  ██ ██ ██       ██ ██  ██ ██    ██ ██  ██ ██
+//  ██████  ██████  ██   ████ ██   ████ ███████ ██   ██ ██  ██████  ██   ████
+
+// ==========================================
+// ==========================================
+// ==========================================
+// _____________________________________________
+// Déconnection en quittant la page
+setPersistence(auth, browserSessionPersistence).then(() => {});
+// _____________________________________________
+// Création du bouton de connexion et de la popup
+// L'error vX vient de là !!!!
+function googleButtonCreate() {
+  ui.start("#firebaseui-auth-container", {
+    signInOptions: [
+      // List of OAuth providers supported.
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
+    signInFlow: "popup",
+    callbacks: {
+      signInSuccessWithAuthResult: function (authResult) {
+        // la variable user contient tout plein d'info utiles sur le user connecté.
+        var user = authResult.user;
+        // Ceci se déclenche si l'utilisateur vient de créer son compte.
+        let IsNewUser = authResult.additionalUserInfo.isNewUser;
+        if (IsNewUser == true) {
+          set(ref(db, "users/" + user.uid), {
+            timestamp: 0,
+            pixels_placed: 0,
+          });
+          let commands = document.querySelector(".commands");
+          let commandsFilter = document.querySelector(".commands-filter");
+          commandsFilter.classList.remove("IsRemoved");
+          commands.classList.remove("IsRemoved");
+        }
+        return false;
+      },
+    },
+  });
+}
+
+// _____________________________________________
+// Déclenché lors de la connexion (ou de l'actualisation de la page)
+getAuth(app).onAuthStateChanged(function (user) {
+  if (user) {
+    // Do something when online
+    // console.log(user.uid);
+    userUID = user.uid;
+    document.querySelector(".menu-userName").innerHTML = user.displayName;
+    document.querySelector("body").classList.add("IsConnected");
+    alertify.notify(
+      "Bonjour " + user.displayName + ", Amusez-vous bien sur Pyxelia !",
+      "success",
+      5
+    );
+    flagLogged = true;
+  }
+});
+
+// _____________________________________________
+// Déconnexion si l'on clique sur le bouton de déconnexion
+
+let disconnectButton = document.querySelector(".menu-disconnect");
+disconnectButton.addEventListener("click", function (e) {
+  signOut(auth).then(() => {
+    document.querySelector("body").classList.remove("IsConnected");
+    let activeColor = document.querySelector(".colorActive");
+    if (activeColor != null) {
+      activeColor.classList.remove("colorActive");
+    }
+    colorRGB = null;
+    googleButtonCreate();
+    flagLogged = false;
+    alertify.notify(
+      "Vous avez correctement été deconnecté, à bientôt !",
+      "success",
+      5
+    );
+  });
 });

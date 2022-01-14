@@ -1,0 +1,51 @@
+.navbar {
+  position: fixed;
+  display: flex;
+  top: 10px;
+  left: 10px;
+  text-decoration: none;
+  & .share-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    border: rgb(0, 0, 0) 3px solid;
+    background-color: rgb(255, 255, 255);
+    padding: 0 10px;
+    animation: slide-out-left 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+    &.shareActive {
+      animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+    & img {
+      width: 40px;
+    }
+  }
+  & .buttonNav {
+    &.buttonDisplayCommands {
+      display: none;
+    }
+    margin: 0 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    height: 60px;
+    width: 60px;
+    font-family: "VT323", monospace;
+    color: white;
+    border: white 3px solid;
+    background-color: black;
+    padding: 0 10px;
+    text-align: center;
+    transition: transform 200ms ease-in;
+    z-index: 3;
+    text-decoration: none;
+    @include for-tablet-landscape-up {
+      &:hover {
+        transform: scale(1.2);
+        cursor: pointer;
+        z-index: 5;
+      }
+    }
+  }
+}
