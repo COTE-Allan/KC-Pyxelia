@@ -6,6 +6,7 @@
 <body>
 <!-- ================ -->
 
+<!-- PAGE ERREUR : Affiche l'erreur et son numéro avec un lien de retour -->
 <div class="error">
     <svg
             id="logo-pyxelia"

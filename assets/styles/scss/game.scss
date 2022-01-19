@@ -2,11 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
 @import "scssCore/core.scss";
+@import "keyframes.scss";
 @import "loading.scss";
 @import "menu.scss";
 @import "commands.scss";
+@import "leaderboard.scss";
 @import "navbar.scss";
-@import "keyframes.scss";
 
 body {
   margin: 0;
@@ -64,11 +65,41 @@ body.IsConnected {
     &-colorsList {
       display: -webkit-box;
     }
+    &-pixelPlaced {
+      display: inline;
+    }
   }
   & #firebaseui-auth-container {
     display: none;
   }
-  & .buttonDisplayCommands {
+  & .navbar .buttonNav.buttonDisplayCommands {
     display: flex;
   }
+}
+
+// Si le secret est activé
+body.SecretOn {
+  animation: color-change-5x 8s linear infinite alternate both;
+}
+// Deuxième partie du secret
+body.error {
+  pointer-events: none;
+  cursor: none;
+  & div {
+    animation: flicker-out-1 2s linear both;
+  }
+  & .navbar {
+    display: none;
+  }
+  & .leaderboard {
+    display: none;
+  }
+}
+#errorMessageVideo {
+  animation: none;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 7;
 }

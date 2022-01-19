@@ -28,7 +28,7 @@ class Database
 
     public function getData($ref)
     {
-        $this->ref = $this->database->getReference('colors');
+        $this->ref = $this->database->getReference($ref);
         $this->snapshot = $this->ref->getSnapshot();
         return $this->snapshot->getValue();
     }

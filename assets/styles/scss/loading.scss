@@ -10,7 +10,7 @@
   width: 100vw;
   height: 100vh;
   background-color: black;
-  z-index: 5;
+  z-index: 6;
   &.loading-complete {
     animation: slide-out-fwd-center 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53)
       both;
@@ -88,24 +88,5 @@
         animation-delay: -1.6s;
       }
     }
-  }
-}
-@keyframes lds-grid {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-@keyframes slide-out-fwd-center {
-  0% {
-    transform: translateZ(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateZ(600px);
-    opacity: 0;
   }
 }

@@ -11,6 +11,7 @@
     </head>
     <body>
     <!-- ================ -->
+    <!-- Page de bienvenue, accueille l'utilisateur avec une page faite pour. -->
     <div class="welcome">
       <header class="welcome-header">
         <a href="https://linktr.ee/Koffi_Cup" target="_blank">Tous mes liens</a>
@@ -87,6 +88,7 @@
     <!-- ================ -->
     <script src="assets/js/pixel-banner.js"></script>
     <script>
+      // Ceci est un script qui génère la bannière de pixels de la page d'acceuil.
       new PixelBanner({
         target: "#pixel_banner_div",
         pixel_options: {

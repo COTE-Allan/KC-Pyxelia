@@ -27,7 +27,7 @@
   height: 90vh;
   background-color: black;
   color: white;
-  border: 8px white solid;
+  border: 4px white solid;
   z-index: 2;
   font-size: 20px;
   & h1 {
@@ -40,13 +40,10 @@
   &.IsRemoved {
     display: none;
   }
-  & #circleClickControls {
-    animation: rotate-cliked 3s ease-in-out 200ms infinite;
-  }
-  & #cursorClickControls {
+  & #mouseClick {
     animation: double-tap 3s ease-in-out 200ms infinite;
   }
-  & #cursorMoveControls {
+  & #mouseMove {
     animation: move-cursor 3s ease-in-out 200ms infinite;
   }
   & #mouseScroll {
@@ -80,9 +77,9 @@
         text-decoration: underline;
         font-size: 25px;
       }
-      & svg {
-        margin-top: 10px;
-        fill: #fff;
+      & img {
+        margin-top: 5px;
+        width: 100px;
       }
     }
   }
@@ -114,6 +111,9 @@
     }
     @include for-tablet-portrait-up {
       flex-direction: row;
+      & img {
+        width: 100px;
+      }
     }
     @include for-tablet {
       flex-direction: column;
@@ -123,13 +123,20 @@
         & span {
           font-size: 45px;
         }
-        & img {
-          width: 100px;
-        }
       }
     }
     @include for-desktop-up {
       display: none;
+    }
+  }
+  &-kcTimer {
+    width: 90%;
+    & p {
+      text-align: center;
+    }
+    & .kcTimer-exemple {
+      height: 10px;
+      animation: color-change-5x 8s linear infinite alternate both;
     }
   }
 }

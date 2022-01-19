@@ -20,8 +20,9 @@ switch ($route) {
     case "game":
         $title = "Pyxelia - Dessinez !";
         $metaDesc = "Connectez-vous et créez une oeuvre d'art avec vos amis sur Pyxelia !";
-        $colors = $db->getData("1/name");
-        render($route, compact('title', 'colors', 'metaDesc'));
+        $colors = $db->getData("colors");
+        $users = $db->getData("users");
+        render($route, compact('title', 'colors', 'metaDesc', 'users'));
         break;
     case "403":
         $title = "Pyxelia - 403";

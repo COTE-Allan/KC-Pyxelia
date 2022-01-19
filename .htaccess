@@ -1,2 +1,6 @@
 ErrorDocument 404 /pyxelia/index.php?pageIs=404
 ErrorDocument 403 /pyxelia/index.php?pageIs=403
+<FilesMatch "\.(json)$">
+Order Allow,Deny 
+Deny from all 
+</FilesMatch>

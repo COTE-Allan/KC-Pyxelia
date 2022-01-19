@@ -37,6 +37,7 @@ let userUID,
   ui = null;
 let flagLogged,
   flagError = false;
+let flagCooldown = false;
 let loadingText;
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
@@ -144,13 +145,15 @@ function updateGrid(grid) {
 function updateDB(pixel_id, color_id) {
   let updates = {};
   let pixel_amount = 0;
-  let timeBeforeNext = 60;
+  let cooldown = 4;
   let actualDate = Math.floor(Date.now() / 1000);
   get(child(dbRef, "users/" + userUID + "/")).then((snapshot) => {
     let result = snapshot.val();
     // Je vérifie si le dernier pixel du joueur à 2 minutes d'ancienneté ou plus.
-    if (actualDate - result["timestamp"] >= timeBeforeNext) {
+    if (actualDate - result["timestamp"] >= cooldown && flagCooldown == false) {
       pixel_amount = result["pixels_placed"] + 1;
+      document.querySelector(".menu-pyxelia-pixelAmount").innerHTML =
+        pixel_amount;
       // Incrémente le nombre de pixel placés par l'utilisateur.
       updates["/users/" + userUID + "/pixels_placed"] = pixel_amount;
       update(ref(db), updates);
@@ -162,8 +165,15 @@ function updateDB(pixel_id, color_id) {
       update(ref(db), updates);
       // J'ai placé mon pixel, je suis alerté.
       alertify.notify("Votre pixel a correctement été placé.", "success", 5);
+      let kcTimer = document.getElementById("kcTimer");
+      kcTimer.classList.add("kcTimerOn");
+      flagCooldown = true;
+      setTimeout(() => {
+        kcTimer.classList.remove("kcTimerOn");
+        flagCooldown = false;
+      }, cooldown * 1000);
     } else {
-      let timeLeft = timeBeforeNext - (actualDate - result["timestamp"]);
+      let timeLeft = cooldown - (actualDate - result["timestamp"]);
       // Notification si je ne peut placer
       alertify.notify(
         "Prochain pixel dans " + timeLeft + " secondes !",
@@ -203,7 +213,7 @@ pixels.forEach((pixel) => {
     });
     // Je quitte le pixel, je repasse sur la couleur de base.
     pixel.addEventListener("mouseleave", function (e) {
-      e.target.style.fill = pixelDefaultRGB;
+      e.target.style.fill = null;
       e.target.style.opacity = 1;
     });
   }
@@ -258,6 +268,7 @@ function googleButtonCreate() {
     signInOptions: [
       // List of OAuth providers supported.
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
     ],
     signInFlow: "popup",
     callbacks: {
@@ -270,11 +281,13 @@ function googleButtonCreate() {
           set(ref(db, "users/" + user.uid), {
             timestamp: 0,
             pixels_placed: 0,
+            user_name: user.displayName,
           });
           let commands = document.querySelector(".commands");
           let commandsFilter = document.querySelector(".commands-filter");
           commandsFilter.classList.remove("IsRemoved");
           commands.classList.remove("IsRemoved");
+          // console.log(user);
         }
         return false;
       },
@@ -297,6 +310,12 @@ getAuth(app).onAuthStateChanged(function (user) {
       5
     );
     flagLogged = true;
+    get(child(dbRef, "users/" + userUID + "/")).then((snapshot) => {
+      let result = snapshot.val();
+      let pixel_amount = result["pixels_placed"];
+      document.querySelector(".menu-pyxelia-pixelAmount").innerHTML =
+        pixel_amount;
+    });
   }
 });
 

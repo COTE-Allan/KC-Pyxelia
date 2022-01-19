@@ -36,7 +36,7 @@ var grid = function (numberPerSide, size, pixelsPerSide) {
 
 //  Creer la grille
 var container = document.getElementById("container");
-container.appendChild(grid(30, 30, 2000));
+container.appendChild(grid(60, 60, 2000));
 var svgElement = document.querySelector("#gridPyxelia");
 var panZoomTiger = svgPanZoom(svgElement, {
   dblClickZoomEnabled: false,
