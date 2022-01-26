@@ -36,12 +36,12 @@ var grid = function (numberPerSide, size, pixelsPerSide) {
 
 //  Creer la grille
 var container = document.getElementById("container");
-container.appendChild(grid(60, 60, 2000));
+container.appendChild(grid(65, 65, 750));
 var svgElement = document.querySelector("#gridPyxelia");
 var panZoomTiger = svgPanZoom(svgElement, {
   dblClickZoomEnabled: false,
-  fit: true,
-  contain: true,
+  // fit: false,
+  // contain: false,
   center: false,
   // Le customEventsHandler ici présent ajoute des fonctionnalités de Hammer.js pour permettre les contrôles mobile, avec le pinch en autre.
   customEventsHandler: {

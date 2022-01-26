@@ -68,7 +68,7 @@ get(child(dbRef, `colors`))
   .catch((error) => {
     // console.error(error);
     loadingText =
-      "Mince ! Il y a un problème ! Essaie d'actualiser la page et si le problème persiste, contacte-moi ! ";
+      "Pyxelia n'a pas réussi à retrouver les couleurs, actualise la page ! ";
     document.querySelector(".loading-screen-message").innerHTML = loadingText;
     flagError = true;
   });
@@ -95,7 +95,7 @@ function getGrid() {
   // console.log(grid);
   get(child(dbRef, `grid`))
     .then((snapshot) => {
-      if (snapshot.exists()) {
+      if (snapshot.exists() && flagError == false) {
         // console.log(snapshot.val());
         grid = snapshot.val();
         updateGrid(grid);
@@ -106,7 +106,7 @@ function getGrid() {
     .catch((error) => {
       console.error(error);
       loadingText =
-        "Mince ! Il y a un problème ! Essaie d'actualiser la page et si le problème persiste, contacte-moi ! ";
+        "Pyxelia n'a pas réussi à récupérer le tableau, actualise la page ! ";
       document.querySelector(".loading-screen-message").innerHTML = loadingText;
       flagError = true;
     });
@@ -136,6 +136,7 @@ function updateGrid(grid) {
     document.querySelector(".loading-screen").classList.add("loading-complete");
     setTimeout(() => {
       document.querySelector(".loading-screen").classList.add("loading-gone");
+      // exportAsPng();
     }, 700);
   }
 }
@@ -151,6 +152,7 @@ function updateDB(pixel_id, color_id) {
     let result = snapshot.val();
     // Je vérifie si le dernier pixel du joueur à 2 minutes d'ancienneté ou plus.
     if (actualDate - result["timestamp"] >= cooldown && flagCooldown == false) {
+      // Incrémentation du nombre de pixels placés par le joueur.
       pixel_amount = result["pixels_placed"] + 1;
       document.querySelector(".menu-pyxelia-pixelAmount").innerHTML =
         pixel_amount;
@@ -163,6 +165,19 @@ function updateDB(pixel_id, color_id) {
       // Met a jour la grille.
       updates["/grid/" + pixel_id + "/color_id"] = color_id;
       update(ref(db), updates);
+      // Incrémentation du nombre d'utilisation du pixel
+      get(child(dbRef, `grid/` + pixel_id)).then((snapshot) => {
+        let grid = snapshot.val();
+        let used_amount = grid.used_amount + 1;
+        updates["/grid/" + pixel_id + "/used_amount"] = used_amount;
+        update(ref(db), updates);
+      });
+      get(child(dbRef, `colors/` + (color_id - 1))).then((snapshot) => {
+        let color = snapshot.val();
+        let used_amount = color.used_amount + 1;
+        updates["/colors/" + (color_id - 1) + "/used_amount"] = used_amount;
+        update(ref(db), updates);
+      });
       // J'ai placé mon pixel, je suis alerté.
       alertify.notify("Votre pixel a correctement été placé.", "success", 5);
       let kcTimer = document.getElementById("kcTimer");

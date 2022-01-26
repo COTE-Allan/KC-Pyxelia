@@ -9,6 +9,9 @@ class Database
     public $ref;
     public $snapshot;
 
+    /**
+     * Controller
+     */
     public function __construct()
     {
         $this->factory;
@@ -18,6 +21,11 @@ class Database
         $this->connectDB();
     }
 
+    /**
+     * Connexion à la DB
+     *
+     * @return void
+     */
     private function connectDB()
     {
         $this->factory = (new Factory)
@@ -26,28 +34,35 @@ class Database
         $this->database = $this->factory->createDatabase();
     }
 
-    public function getData($ref)
+    /**
+     * Obtenir une data depuis la DB
+     *
+     * @param string $ref
+     * @return void
+     */
+    private function getData($ref)
     {
         $this->ref = $this->database->getReference($ref);
         $this->snapshot = $this->ref->getSnapshot();
         return $this->snapshot->getValue();
     }
     /**
-     * Universal getter
+     * Obtenir les couleurs depuis la DB
      *
-     * @return  self
+     * @return void
      */
-    public function __get($name)
+    public function getColors()
     {
-        return $this->$name;
+        return $this->getData("colors");
     }
-
     /**
-     * Get the value of DB
+     * Obtenir les users depuis la DB
+     *
+     * @return void
      */
-    public function getDB()
+    public function getUsers()
     {
-        return $this->pdo;
+        return $this->getData("users");
     }
 }
 $db = new Database();

@@ -2,12 +2,11 @@
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
 @import "scssCore/core.scss";
-@import "keyframes.scss";
-@import "loading.scss";
-@import "menu.scss";
-@import "commands.scss";
-@import "leaderboard.scss";
-@import "navbar.scss";
+@import "parts/keyframes.scss";
+@import "parts/loading.scss";
+@import "parts/menu.scss";
+@import "parts/commands.scss";
+@import "parts/navbar.scss";
 
 body {
   margin: 0;
@@ -19,6 +18,21 @@ body {
   flex-direction: column;
   @include for-tablet-landscape-up {
     flex-direction: row;
+  }
+  & #pixel_banner_div {
+    position: fixed !important;
+    top: 70vh;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 100%;
+    height: 520px;
+    z-index: -1;
+    opacity: 0.25;
+    & canvas {
+      width: 100vw;
+    }
   }
 }
 .alertify-notifier {

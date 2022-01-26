@@ -8,10 +8,15 @@
     <img src="assets/svg/link.svg" alt="liens" />
     Mes liens
   </a>
-  <a class="buttonNav buttonDisplayLeaderboard">
+  <a class="buttonNav buttonDisplayLeaderboard" href="index.php?pageIs=stats" target="_blank">
     <img src="assets/svg/leaderboard.svg" alt="leaderboard" />
-    Leaderboard
+    Stats
   </a>
+  <!-- Désactivé pour soulager Firebase -->
+  <!-- <a class="buttonNav downloadGridButton">
+    <img src="assets/svg/screenshot.svg" alt="prendre un screenshot" />
+    Screenshot
+  </a> -->
   <a class="buttonNav buttonDisplayShare">
       <img src="assets/svg/share.svg" alt="liens" />
       Partager

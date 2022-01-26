@@ -8,3 +8,5 @@ vendor/lcobucci/jwt/src/Signer/Ecdsa/Sha512.php
 composer.json
 
 composer.lock
+
+livrable1-26-10/

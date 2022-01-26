@@ -1,3 +1,5 @@
+// Ce plugin génère une bannière de pixels qui clignotents, utilisé dans la page d'accueil.
+
 // constructor function
 var PixelBanner = function (opts = {}, target_ref = null) {
   configureOptions(this, opts, target_ref);

@@ -36,7 +36,7 @@ function frontController()
      */
     // on déclare la variable qui va récevoir l'id et on l'initialise avec rien.
     $page = null;
-    $pageList = ["game", "welcome", "403"];
+    $pageList = ["game", "welcome", "403", "stats", "legals"];
 
     // on vérifie l'existance d'un paramètre id, non null, de type numérique
     if (!empty($_GET['pageIs']) && ctype_print($_GET['pageIs'])) {

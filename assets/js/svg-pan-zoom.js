@@ -1,5 +1,8 @@
 // svg-pan-zoom v3.6.1
 // https://github.com/ariutta/svg-pan-zoom
+
+// Ce plugin permet la navigation dans la grille, avec le pan (le déplacément) et le zoom.
+
 !(function s(r, a, l) {
   function u(e, t) {
     if (!a[e]) {
@@ -1015,8 +1018,7 @@
                   (o = n[0]);
               }
               if (!o) {
-                var i =
-                  "viewport-" + new Date().toISOString().replace(/\D/g, "");
+                var i = "viewportPyxelia";
                 (o = document.createElementNS(this.svgNS, "g")).setAttribute(
                   "id",
                   i

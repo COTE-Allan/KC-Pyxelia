@@ -20,16 +20,29 @@ switch ($route) {
     case "game":
         $title = "Pyxelia - Dessinez !";
         $metaDesc = "Connectez-vous et créez une oeuvre d'art avec vos amis sur Pyxelia !";
-        $colors = $db->getData("colors");
-        $users = $db->getData("users");
+        $colors = $db->getColors();
+        render($route, compact('title', 'colors', 'metaDesc'));
+        break;
+    case "stats":
+        $title = "Pyxelia - Statistiques";
+        $metaDesc = "Toute les informations sur le tableau de Pyxelia !";
+        $colors = $db->getColors();
+        $users = $db->getUsers();
         render($route, compact('title', 'colors', 'metaDesc', 'users'));
         break;
+    case "legals":
+        $title = "Pyxelia - Mentions légales";
+        $metaDesc = "Voici nos mentions légales.";
+        render($route, compact('title', 'metaDesc'));
+        break;
+
     case "403":
         $title = "Pyxelia - 403";
         $metaDesc = "Mince, il y a un problème, tu ne devrait pas être ici !";
         $error_number = "403";
         $error_message = "Eh oh ! T'essaie d'accéder à des trucs interdits là !";
         render("error", compact('title', 'metaDesc', 'error_message', 'error_number'));
+
     default:
         $title = "Pyxelia - 404";
         $metaDesc = "Mince, il y a un problème, tu ne devrait pas être ici !";
