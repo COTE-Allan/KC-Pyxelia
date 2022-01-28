@@ -1,3 +1,7 @@
+# ATTENTION : CE REPO N'EST ABSOLUMENT PAS UTILISABLE ! IL MANQUE PLUSIEURS FICHIERS SENSIBLES ALORS ALLEZ SUR LE SITE OFFICIEL POUR UTILISER LE SITE.
+ ## Accédez à Pyxelia via ce lien :
+ http://pyxelia.kofficup.fr/
+
 
 # Pyxelia by Allan COTE
 
